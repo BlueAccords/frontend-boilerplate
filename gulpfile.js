@@ -143,10 +143,13 @@ var fontsPath = './' + devDir + '/fonts/**/*';
 var nunjucksPath = './' + devDir + '/pages/**/*.+(html|nunjucks)';
 var nunjucksTemplatePath = './' + devDir + '/templates/**/*.+(html|nunjucks)';
 
-// Production Paths
-var outputImgPath = './' + prodDir + '/images'
-var outputFontsPath = './' + prodDir + '/fonts'
+// Images Paths
+var outputDevImgPath = './' + tempDir + '/images';
+var outputProdImgPath = './' + prodDir + '/images';
 
+// Fonts Paths
+var outputDevFontsPath = './' + tempDir + '/fonts';
+var outputProdFontsPath = './' + prodDir + '/fonts'
 
 // Nunjucks Render options
 var nunjucksOptions = {
@@ -305,12 +308,19 @@ gulp.task('minify', function() {
     .pipe(gulp.dest(prodDir))
 });
 
+// transfer images from dev folder to temp development folder to host on local server
+gulp.task('images:dev', function() {
+  return gulp.src(imgPath)
+    .pipe(cache(imagemin(imageminOptions)))
+    .pipe(gulp.dest(outputDevImgPath))
+});
+
 // Optimize/compress images using gulp-imagemin
 // Outputs the files to production images folder
 // 
 // More info here
 // https://github.com/sindresorhus/gulp-imagemin
-gulp.task('images', function() {
+gulp.task('images:prod', function() {
   // Gets all the images files in the images folder
   return gulp.src(imgPath)
 
@@ -320,7 +330,7 @@ gulp.task('images', function() {
     .pipe(cache(imagemin(imageminOptions)))
 
     // Outputs to the production images folder
-    .pipe(gulp.dest(outputImgPath))
+    .pipe(gulp.dest(outputProdImgPath))
 });
 
 // auto prefixer to add css prefixes
@@ -329,16 +339,26 @@ gulp.task('prefix', function() {
   gulp.src(cssPath)
 })
 
+// Transfer font file to temp dev directory
+gulp.task('fonts:dev', function() {
+  return gulp.src(fontsPath)
+    .pipe(gulp.dest(outputDevFontsPath))
+});
 
 // Transfer font files from dev to production
-gulp.task('fonts', function() {
+gulp.task('fonts:prod', function() {
   return gulp.src(fontsPath)
-    .pipe(gulp.dest(outputFontsPath))
+    .pipe(gulp.dest(outputProdFontsPath))
 });
 
 // Delete production files before tasks are ran
 gulp.task('clean:dist', function() {
   return del.sync(prodDir)
+});
+
+// Delete tmp dev files
+gulp.task('clean:dev', function() {
+  return del.sync(tempDir)
 });
 
 // Used to clear images cache on local filesystem
@@ -353,7 +373,7 @@ gulp.task('build', function(callback) {
   // runSync used to clean dist folder FIRST THEN moves all files there
   // css files need to be compiled first THEN html generated THEN minification
   runSync('clean:dist', 'sass:prod', 'nunjucks',
-    ['minify', 'images', 'fonts'], 
+    ['minify', 'images:prod', 'fonts:prod'], 
     callback)
 });
 
@@ -361,14 +381,14 @@ gulp.task('build', function(callback) {
 gulp.task('build:server', function(callback) {
   // runSync used to clean dist folder FIRST THEN moves all files there
   runSync('clean:dist', 'sass:prod', 'nunjucks',
-    ['minify', 'images', 'fonts'], 
+    ['minify', 'images:prod', 'fonts:prod'], 
     'browserSyncDist', 
     callback)
 });
 
 gulp.task('build:deploy', function(callback) {
   runSync('clean:dist',
-    ['nunjucks', 'sass:prod', 'minify', 'images', 'fonts'], 
+    ['nunjucks', 'sass:prod', 'minify', 'images:prod', 'fonts:prod'], 
     'rsync', 
     callback)
 })
@@ -385,6 +405,6 @@ gulp.task('rsync', function() {
 // Default function that runs browsersync and watches for changes
 // Ran by default if calling "gulp" without any arguments
 gulp.task('default', function(callback) {
-  runSync(['nunjucks', 'sass', 'browserSync', 'watch'],
+  runSync(['clean:dev', 'nunjucks', 'sass', 'images:dev', 'fonts:dev', 'browserSync', 'watch'],
     callback)
 });
