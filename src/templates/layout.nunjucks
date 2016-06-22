@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>frontend-boilerplate</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Font style -->
+    <link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+
+    <!-- Concatenates and minifies css files in gulp -->
+    <!--build:css css/styles.min.css -->
+    <link rel="stylesheet" href="css/main.css">
+    <!--endbuild -->
+
+    <!--[if lt IE 8]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+  </head>
+  <body>
+    <!-- Header -->
+    {% include "partials/header.nunjucks" %}
+
+    <!-- Main Content Here -->
+    {% block content %} {% endblock %}
+    
+    
+    <!-- Footer -->
+    {% include "partials/footer.nunjucks" %}
+    <!-- Javascript files -->
+    <!-- Builds js files and concatenates and minifies them to js/main.min.js directory -->
+
+    
+    <!--build:js js/main.min.js -->
+    <script src="js/main.js"></script>
+    <!-- INCLUDE OTHER JS FILES HERE-->
+    
+
+    <!-- endbuild -->
+  </body>
+</html>

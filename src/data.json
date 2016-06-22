@@ -1,0 +1,12 @@
+{
+  "images":[{
+      "src": "alpha",
+      "alt": "alpha picture"
+    }, {
+      "src": "bravo",
+      "alt": "bravo picture"
+    }, {
+      "src": "charlie",
+      "alt": "charlie picture"
+    }]
+}

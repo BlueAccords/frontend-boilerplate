@@ -1,0 +1,301 @@
+@charset "UTF-8";
+/*
+  Calculating Column Widths
+
+  Calculation for a SINGLE column width
+  scw = (100 – (m * (mc – 1))) / mc
+    (100 - (1.6 * 11)) / 12
+    (100 - 17.6) / 12
+    82.4 / 12         // 82.4 is the total width of 11/12 columns MINUS margins
+    6.86666666667
+
+  (100 – (m * (mc – 1))) / mc
+  (100 - (1 * (12-1))) / 12
+
+  scw = single column width
+  m = margin gutters (1%)
+  mc = maximum columns (12)
+
+  (100 - (1 * (12-1))) / 12
+
+  Where:
+
+  scw = single column width
+  m = margin (1.6%)
+  mc = maximum columns (12)
+
+  Calculation for the REST of the column widths
+
+  cw = (scw * cs) + (m * (cs – 1))
+  
+  Where:
+
+  cw = column width
+  scw = single column width (6.86666666667%)
+  cs = column span (1-12)
+  m = margin (1.6%)
+  
+  2/12  == (6.86666666667 * 2) + (1.6 * (2 - 1)); width = 15.3333333333
+  3/12  == (6.86666666667 * 3) + (1.6 * (3 - 1)); width = 23.8
+  4/12  == (6.86666666667 * 4) + (1.6 * (4 - 1)); width = 32.2666666667
+  5/12  == (6.86666666667 * 5) + (1.6 * (5 - 1)); width = 40.7333333333
+  6/12  == (6.86666666667 * 6) + (1.6 * (6 - 1)); width = 49.2
+  7/12  == (6.86666666667 * 7) + (1.6 * (7 - 1)); width = 57.6666666667
+  8/12  == (6.86666666667 * 8) + (1.6 * (8 - 1)); width = 66.1333333333
+  9/12  == (6.86666666667 * 9) + (1.6 * (9 - 1)); width = 74.6
+  10/12 == (6.86666666667 * 10) + (1.6 * (10 - 1)); width = 83.0666666667
+  11/12 == (6.86666666667 * 11) + (1.6 * (11 - 1)); width = 91.5333333333
+  12/12 == (6.86666666667 * 12) + (1.6 * (12 - 1)); width = 100
+
+ */
+header {
+  background-color: #FEF6C9;
+}
+
+nav {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: .5rem 1rem;
+  line-height: 2rem;
+}
+
+nav:before, nav:after {
+  content: "";
+  display: table;
+}
+
+nav:after {
+  clear: both;
+}
+
+.header-title {
+  font-weight: 100;
+  float: left;
+  margin: 0 auto;
+  color: #332424;
+}
+
+#main-menu {
+  background-color: #E3F2E5;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s;
+  /* Set height to 100% of available space */
+  height: 100%;
+  width: 80vw;
+  overflow-y: scroll;
+  -webkit-transform: translateX(-100%);
+          transform: translateX(-100%);
+}
+
+#main-menu.is-active {
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+}
+
+#main-menu li a:visited, #main-menu li a:link {
+  color: #332424;
+  text-decoration: none;
+}
+
+#main-menu li a:hover, #main-menu li a:active {
+  color: #604444;
+}
+
+#slide-menu-close-btn {
+  border: none;
+  background-color: #E3F2E5;
+}
+
+#hamburger-button {
+  display: block;
+  cursor: pointer;
+  /* Float right side of screen */
+  float: right;
+  vertical-align: middle;
+  background-color: #725752;
+  border: none;
+  /* Eliminate button styling on click */
+}
+
+#hamburger-button .icon-bar {
+  margin: 0 auto 3px;
+  background-color: #FEF6C9;
+  display: block;
+  width: 22px;
+  height: 5px;
+  border-radius: 1px;
+}
+
+#hamburger-button:focus {
+  outline: none;
+  background-color: #332424;
+}
+
+#hamburger-button:hover {
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+
+#hamburger-button:active {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  -webkit-appearance: button;
+     -moz-appearance: button;
+          appearance: button;
+}
+
+@media only screen and (min-width: 887px) {
+  #main-menu {
+    display: block;
+    position: relative;
+    height: auto;
+    width: auto;
+    overflow-y: visible;
+    -webkit-transform: none;
+            transform: none;
+    background-color: inherit;
+  }
+  #main-menu li a:visited,
+  #main-menu li a:link {
+    font-weight: 100;
+    color: #332424;
+    text-decoration: none;
+  }
+  #main-menu li a:hover,
+  #main-menu li a:active {
+    color: #604444;
+  }
+  #slide-menu-close-btn {
+    display: none;
+  }
+  #hamburger-button {
+    display: none;
+  }
+  .nav-lg {
+    display: block;
+  }
+  .nav-lg-menu {
+    padding: 0;
+    list-style: none;
+    float: right;
+  }
+  .nav-lg-menu li {
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 1em;
+  }
+  .nav-lg-menu li:first-child {
+    margin-left: 0;
+  }
+}
+
+footer {
+  margin: 0 auto;
+  text-align: center;
+  padding: 1em 0;
+  background-color: #FEF6C9;
+  color: #332424;
+}
+
+@media only screen and (min-width: 887px) {
+  footer {
+    margin: 0 1%;
+  }
+}
+
+.recipe-ingredients-list {
+  margin-left: 4em;
+  list-style: none;
+  list-style-image: url(../images/arrow.png);
+}
+
+.recipe-instructions .ri-list {
+  margin-left: 4em;
+}
+
+.recipe-instructions .ri-sublist {
+  margin-left: 1em;
+}
+
+.recipe-instructions .ri-sublist:nth-child(1) {
+  margin-left: 1em;
+}
+
+.special-notes-list {
+  margin-left: 3em;
+}
+
+.special-notes-list > dt:before {
+  content: "+ ";
+}
+
+.special-notes-list > dd {
+  margin-left: 1em;
+}
+
+.container {
+  margin: 0 auto;
+  margin-top: 2em;
+}
+
+.hero-container {
+  margin-top: 0;
+}
+
+.list-title {
+  color: #FFFEF7;
+  background-color: #725752;
+  margin-bottom: .5em;
+}
+
+@media only screen and (min-width: 640px) {
+  .container {
+    max-width: 1200px;
+  }
+  .recipe-img {
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+  .recipe-img img {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .recipe-img .recipe-text h1 {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+  }
+}
+
+*,
+*:after,
+*:before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+body {
+  width: 100%;
+  font-family: 'PT Sans', sans-serif;
+}
+
+/*# sourceMappingURL=../maps/main.css.map */
